@@ -22,5 +22,21 @@ pipeline {
                 }
             }
         }
+        stage('Update GitOps Repo') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'GITHUB-CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                    sh '''
+                        git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/Ahetoo7/eyouth-argocd.git
+                        cd eyouth-argocd
+                        sed -i "s|image: .*myapp:.*|image: michaelfawzy/myapp:${BUILD_NUMBER}|g" apps/nginx/deployment.yaml
+                        git config user.email "jenkins@ci.local"
+                        git config user.name "Jenkins CI"
+                        git add .
+                        git commit -m "update image ${BUILD_NUMBER}"
+                        git push
+                    '''
+                }
+            }
+        }
     }
 }
