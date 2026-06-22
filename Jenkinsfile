@@ -29,7 +29,7 @@ pipeline {
                         rm -rf eyouth-argocd
                         git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/Ahetoo7/eyouth-argocd.git
                         cd eyouth-argocd
-                        sed -i "s|image: .*myapp:.*|image: michaelfawzy/myapp:${BUILD_NUMBER}|g" projectapp.yaml
+                        sed -i "s|image: .*myapp:.*|image: michaelfawzy/myapp:${BUILD_NUMBER}|g" apps/myapp/deployment.yaml
                         git config user.email "jenkins@ci.local"
                         git config user.name "Jenkins CI"
                         git add .
