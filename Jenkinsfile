@@ -28,7 +28,7 @@ pipeline {
                     sh '''
                         git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/Ahetoo7/eyouth-argocd.git
                         cd eyouth-argocd
-                        sed -i "s|image: .*myapp:.*|image: michaelfawzy/myapp:${BUILD_NUMBER}|g" apps/nginx/deployment.yaml
+                        sed -i "s|image: .*myapp:.*|image: michaelfawzy/myapp:${BUILD_NUMBER}|g" apps/projectapp.yaml
                         git config user.email "jenkins@ci.local"
                         git config user.name "Jenkins CI"
                         git add .
