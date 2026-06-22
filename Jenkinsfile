@@ -26,6 +26,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'GITHUB-CRED', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                     sh '''
+                        rm -rf eyouth-argocd
                         git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/Ahetoo7/eyouth-argocd.git
                         cd eyouth-argocd
                         sed -i "s|image: .*myapp:.*|image: michaelfawzy/myapp:${BUILD_NUMBER}|g" apps/projectapp.yaml
