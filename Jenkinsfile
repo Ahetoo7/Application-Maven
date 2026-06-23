@@ -1,6 +1,7 @@
 pipeline {
     agent {
         kubernetes {
+            cloud 'k8s-cloud'
             defaultContainer 'maven'
             yaml '''
 apiVersion: v1
