@@ -3,15 +3,17 @@ pipeline {
         kubernetes {
             cloud 'k8s-cloud'
             yaml '''
-apiVersion: v1
+aapiVersion: v1
 kind: Pod
 spec:
+  serviceAccountName: jenkins
+
   containers:
 
     - name: maven
       image: maven:3.9-eclipse-temurin-17
-      command: ["sleep"]
-      args: ["99d"]
+      command: ["cat"]
+      tty: true
 
     - name: docker
       image: docker:24-dind
@@ -20,11 +22,23 @@ spec:
       env:
         - name: DOCKER_TLS_CERTDIR
           value: ""
+      command: ["sh", "-c"]
+      args:
+        - dockerd-entrypoint.sh &
+          sleep 10;
+          tail -f /dev/null
+      volumeMounts:
+        - name: dind-storage
+          mountPath: /var/lib/docker
 
     - name: git
       image: alpine/git:2.45.2
-      command: ["sleep"]
-      args: ["99d"]
+      command: ["cat"]
+      tty: true
+
+  volumes:
+    - name: dind-storage
+      emptyDir: {}
 '''
         }
     }
