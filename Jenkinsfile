@@ -1,29 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            cloud 'k8s-cloud'
-            defaultContainer 'maven'
-            yaml '''
-apiVersion: v1
-kind: Pod
-spec:
-  serviceAccountName: jenkins
-  containers:
-    - name: maven
-      image: maven:3.9-eclipse-temurin-17
-      command:
-        - cat
-      tty: true
-
-    - name: docker
-      image: docker:24-cli
-      command:
-        - cat
-      tty: true
-'''
-        }
-    }
-
+    agent any
     tools {
         maven 'mvn'
     }
