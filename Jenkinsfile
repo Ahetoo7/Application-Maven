@@ -1,40 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            cloud 'k8s-cloud'
-            yaml '''
-apiVersion: v1
-kind: Pod
-spec:
-  serviceAccountName: jenkins
-
-  containers:
-
-    - name: maven
-      image: maven:3.9-eclipse-temurin-17
-      command: ["cat"]
-      tty: true
-
-    - name: docker
-      image: docker:24-cli
-      command: ["cat"]
-      tty: true
-      volumeMounts:
-        - name: docker-sock
-          mountPath: /var/run/docker.sock
-
-    - name: git
-      image: alpine/git:2.45.2
-      command: ["cat"]
-      tty: true
-
-  volumes:
-    - name: docker-sock
-      hostPath:
-        path: /var/run/docker.sock
-'''
-        }
-    }
+    agent any
     tools {
         maven 'mvn'
     }
