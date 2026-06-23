@@ -3,7 +3,7 @@ pipeline {
         kubernetes {
             cloud 'k8s-cloud'
             yaml '''
-aapiVersion: v1
+apiVersion: v1
 kind: Pod
 spec:
   serviceAccountName: jenkins
@@ -16,12 +16,12 @@ spec:
       tty: true
 
     - name: docker
-  image: docker:24-cli
-  command: ["cat"]
-  tty: true
-  volumeMounts:
-    - name: docker-sock
-      mountPath: /var/run/docker.sock
+      image: docker:24-cli
+      command: ["cat"]
+      tty: true
+      volumeMounts:
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
 
     - name: git
       image: alpine/git:2.45.2
@@ -29,8 +29,9 @@ spec:
       tty: true
 
   volumes:
-    - name: dind-storage
-      emptyDir: {}
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
 '''
         }
     }
@@ -49,9 +50,6 @@ spec:
             steps {
                 container('docker') {
                     sh '''
-dockerd-entrypoint.sh &
-sleep 5
-
 docker version
 docker build -t michaelfawzy/myapp:${BUILD_NUMBER} .
 '''
