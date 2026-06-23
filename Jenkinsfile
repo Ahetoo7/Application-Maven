@@ -16,20 +16,12 @@ spec:
       tty: true
 
     - name: docker
-      image: docker:24-dind
-      securityContext:
-        privileged: true
-      env:
-        - name: DOCKER_TLS_CERTDIR
-          value: ""
-      command: ["sh", "-c"]
-      args:
-        - dockerd-entrypoint.sh &
-          sleep 10;
-          tail -f /dev/null
-      volumeMounts:
-        - name: dind-storage
-          mountPath: /var/lib/docker
+  image: docker:24-cli
+  command: ["cat"]
+  tty: true
+  volumeMounts:
+    - name: docker-sock
+      mountPath: /var/run/docker.sock
 
     - name: git
       image: alpine/git:2.45.2
